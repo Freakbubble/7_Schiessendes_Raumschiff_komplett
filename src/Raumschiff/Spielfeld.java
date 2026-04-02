@@ -158,55 +158,19 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 
 		}
 		
-		if(playerMoveLeft == true) {
-			
-			player.setx_MovingDistance(-4);
-			
-		}else if(playerMoveRight == true) {
-			
-			player.setx_MovingDistance(4);
-			
-		}else if(playerMoveRight == false || playerMoveLeft == false) {
-			
-			player.setx_MovingDistance(0);
-						
+		if(playerMoveUp == true) {					//Playerbewegung mit Beschleunigung und maximalem Speed
+			player.setMovingAngle(1.5* Math.PI);
+			if(player.getMovingDistance()<= player.getMaxSpeed()) {
+				System.out.println(player.getMovingDistance());
+			player.setMovingDistance(player.getMovingDistance()+ player.getAcceleration());
+			}
+		}else {										// Simulierte Reibung beim Nichtdrücken der Tasten
+			if(player.getMovingDistance()> 0) {
+				player.setMovingDistance(player.getMovingDistance() - 0.25 * player.getAcceleration());
+			}
 		}
-		
-		if(playerMoveLeft == true && playerMoveUp == true) {
-			player.setx_MovingDistance(-4/Math.PI);
-			player.sety_MovingDistance(-4/Math.PI);
-		}
-		
-		if(playerMoveLeft == true && playerMoveDown == true) {
-			player.setx_MovingDistance(-4/Math.PI);
-			player.sety_MovingDistance(4/Math.PI);
-		}
-		
-		if(playerMoveRight == true && playerMoveUp == true) {
-			player.setx_MovingDistance(4/Math.PI);
-			player.sety_MovingDistance(-4/Math.PI);
-		}
-		
-		if(playerMoveRight == true && playerMoveDown == true) {
-			player.setx_MovingDistance(4/Math.PI);
-			player.sety_MovingDistance(4/Math.PI);
-		}
-		
-		
-		
-		if(playerMoveUp == true) {
 			
-			player.sety_MovingDistance(-4);
-			
-		}else if(playerMoveDown == true) {
-			
-			player.sety_MovingDistance(4);
-			
-		} else if(playerMoveUp == false || playerMoveDown == false) {
-			
-			player.sety_MovingDistance(0);
-						
-		}
+		
 		
 
 		if (enemyAlive == true) { // Bewegen des lebendigen Enemy
@@ -224,7 +188,7 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 
 		// move player
 		
-		player.makeMove2D();
+		player.makeMove();
 
 		repaint();
 	}

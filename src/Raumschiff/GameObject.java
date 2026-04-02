@@ -58,21 +58,21 @@ public abstract class GameObject {
 		this.movingDistance = movingDistance;
 	}
 	
-	public double getx_MovingDistance() {
-		return x_movingDistance;
-	}
-
-	public void setx_MovingDistance(double x_movingDistance) {
-		this.x_movingDistance = x_movingDistance;
-	}
-	
-	public double gety_MovingDistance() {
-		return y_movingDistance;
-	}
-
-	public void sety_MovingDistance(double y_movingDistance) {
-		this.y_movingDistance = y_movingDistance;
-	}
+//	public double getx_MovingDistance() {
+//		return x_movingDistance;
+//	}
+//
+//	public void setx_MovingDistance(double x_movingDistance) {
+//		this.x_movingDistance = x_movingDistance;
+//	}
+//	
+//	public double gety_MovingDistance() {
+//		return y_movingDistance;
+//	}
+//
+//	public void sety_MovingDistance(double y_movingDistance) {
+//		this.y_movingDistance = y_movingDistance;
+//	}
 	
 		
 	//Durch die Angabe "static" kann die Methode �ber den Klassennamen auch von anderen Klassen aus aufgerufen werden.
@@ -91,18 +91,18 @@ public abstract class GameObject {
 		objectPosition.setY(objectPosition.getY() + direction.getY()*movingDistance);
 	}
 	
-	public void moveGameObject2D(){
-		objectPosition.setX(objectPosition.getX() + x_movingDistance);
-		objectPosition.setY(objectPosition.getY() + y_movingDistance);
-	}
+//	public void moveGameObject2D(){
+//		objectPosition.setX(objectPosition.getX() + x_movingDistance);
+//		objectPosition.setY(objectPosition.getY() + y_movingDistance);
+//	}
 	
 	public void makeMove() {
 		moveGameObject();
 	}
 	
-	public void makeMove2D() {
-		moveGameObject2D();
-	}
+//	public void makeMove2D() {
+//		moveGameObject2D();
+//	}
 	
 	public boolean checkCollision(double x1, double x2, double y1, double y2, double r1, double r2) { // Prüfen ob zwei Objekte kollidieren
 

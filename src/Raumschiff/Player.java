@@ -8,14 +8,16 @@ public class Player extends GameObject {
 	// Variablen
 	int shotsize = 2;
 	int shotspeed = -4;
-	private boolean playerMoveLeft;
-	private boolean playerMoveRight;
-	private boolean playerMoveUp;
-	private boolean playerMoveDown;
-	private double playerSpeedX;
-	private double playerSpeedY;
-	private double playerx;
-	private double playery;
+	private double acceleration = 0.5;
+	private double maxSpeed = 3;
+//	private boolean playerMoveLeft;
+//	private boolean playerMoveRight;
+//	private boolean playerMoveUp;
+//	private boolean playerMoveDown;
+//	private double playerSpeedX;
+//	private double playerSpeedY;
+//	private double playerx;
+//	private double playery;
 
 	public Player(Coordinate objectPosition, double width, double height, double movingAngle, double movingDistance) {
 
@@ -23,12 +25,12 @@ public class Player extends GameObject {
 		super(objectPosition, width, height);
 		setMovingAngle(movingAngle); // Achtung der Winkel wird im Bogenma� angegeben!!
 		setMovingDistance(movingDistance);
-		playerMoveLeft = false;
-		playerMoveRight = false;
-		playerMoveUp = false;
-		playerMoveDown = false;
-		playerSpeedX = 3;
-		playerSpeedY = 3;
+//		playerMoveLeft = false;
+//		playerMoveRight = false;
+//		playerMoveUp = false;
+//		playerMoveDown = false;
+//		playerSpeedX = 3;
+//		playerSpeedY = 3;
 
 	}
 
@@ -38,36 +40,20 @@ public class Player extends GameObject {
 		super.makeMove();
 	}
 
-	public void setPlayerMoveUp(boolean newPlayerUp) {
-		playerMoveUp = newPlayerUp;
+	public void setAcceleration(double new_acceleration) {
+		acceleration = new_acceleration;
 	}
-
-	public void setPlayerMoveDown(boolean newPlayerDown) {
-		playerMoveDown = newPlayerDown;
+	
+	public double getAcceleration(){
+		return acceleration;
 	}
-
-	public void setPlayerMoveRight(boolean newPlayerRight) {
-		playerMoveRight = newPlayerRight;
+	
+	public void setMaxSpeed(double new_maxSpeed) {
+		maxSpeed =new_maxSpeed;
 	}
-
-	public void setPlayerMoveLeft(boolean newPlayerLeft) {
-		playerMoveLeft = newPlayerLeft;
-	}
-
-	public boolean playerMoveUp() {
-		return this.playerMoveUp;
-	}
-
-	public boolean playerMoveDown() {
-		return this.playerMoveDown;
-	}
-
-	public boolean playerMoveRight() {
-		return this.playerMoveRight;
-	}
-
-	public boolean playerMoveLeft() {
-		return this.playerMoveLeft;
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
 	}
 
 	public Shot generateShot() {
