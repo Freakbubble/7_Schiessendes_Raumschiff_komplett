@@ -12,13 +12,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Spielfeld extends JPanel implements MouseListener, KeyListener { // JPanel ist eine Klasse, in der
+public class Spielfeld extends JPanel implements MouseListener, KeyListener, MouseMotionListener { // JPanel ist eine Klasse, in der
 																				// gezeichnet werden kann
 
 	private final Dimension prefSize = new Dimension(800, 400); // Die Dimension des Spielfeldes k�nnte auch anders
@@ -39,10 +40,11 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 	private Player player;
 	private Shot[] shots;
 	private int shotSpeed;
-	private boolean playerMoveLeft;
-	private boolean playerMoveRight;
 	private boolean playerMoveUp;
-	private boolean playerMoveDown;
+
+	//Mouseposition
+	private double mouseX;
+	private double mouseY;
 
 	public Spielfeld() {
 		setFocusable(true);
@@ -78,13 +80,17 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 
 		// Registrieren des MouseListeners
 		addMouseListener(this);
+		
+		//Registrieren des MouseMotionListeners
+		addMouseMotionListener(this);
 
 		// Registrieren des KeyListeners
 		addKeyListener(this);
 
 		// Mauszeiger wird zu Fadenkreuz
 		c = new Cursor(Cursor.CROSSHAIR_CURSOR);
-		this.setCursor(c);
+		this.setCursor(c);		
+		
 
 		t = new Timer(20, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -140,6 +146,18 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 			}
 		}
 	}
+	
+	//Berechnen den Winkel zwischen Raumschiff und Mauszeiger
+	
+	private double getAngle() {
+		
+		double dx = player.getObjectPosition().getX() - mouseX;
+		double dy = mouseY - player.getObjectPosition().getY();
+		
+		double hypothe = Math.sqrt((dx * dx) + (dy * dy));
+		System.out.println(Math.asin(dy/hypothe));
+		return Math.acos(dx/hypothe);
+	}
 
 	private void doOnTick() {
 
@@ -158,21 +176,6 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 
 		}
 		
-		if(playerMoveUp == true) {					//Playerbewegung mit Beschleunigung und maximalem Speed
-			player.setMovingAngle(1.5* Math.PI);
-			if(player.getMovingDistance()<= player.getMaxSpeed()) {
-				System.out.println(player.getMovingDistance());
-			player.setMovingDistance(player.getMovingDistance()+ player.getAcceleration());
-			}
-		}else {										// Simulierte Reibung beim Nichtdrücken der Tasten
-			if(player.getMovingDistance()> 0) {
-				player.setMovingDistance(player.getMovingDistance() - 0.25 * player.getAcceleration());
-			}
-		}
-			
-		
-		
-
 		if (enemyAlive == true) { // Bewegen des lebendigen Enemy
 
 			enemy.makeMove();
@@ -187,9 +190,17 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 		}
 
 		// move player
-		
-		player.makeMove();
-
+		player.setMovingAngle(getAngle());
+		if(playerMoveUp == true) {					//Playerbewegung mit Beschleunigung und maximalem Speed
+			if(player.getMovingDistance()<= player.getMaxSpeed()) {
+			player.setMovingDistance(player.getMovingDistance()+ player.getAcceleration());
+			}
+		}else {										// Simulierte Reibung beim Nichtdrücken der Tasten
+			if(player.getMovingDistance()> 0) {
+				player.setMovingDistance(player.getMovingDistance() - 0.25 * player.getAcceleration());
+			}
+		}
+		player.makeMove();		
 		repaint();
 	}
 
@@ -259,18 +270,12 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-			playerMoveLeft=true; 
-			break;
-		case KeyEvent.VK_RIGHT:
-			playerMoveRight=true; 
-			break;
 		case KeyEvent.VK_UP:
 			playerMoveUp=true; 
 			break;
 		case KeyEvent.VK_DOWN:
-			playerMoveDown=true; 
-			break;	
+			player.setMovingDistance(-5);
+			break;
 		case KeyEvent.VK_SPACE:  // neuen Schuss mit Space-Taste erzeugen und in Array speichern
 			for (int i = 0; i < shots.length; i++) {
 				if (shots[i] == null) { // Falls ein Platz "frei" ist.
@@ -284,18 +289,10 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-			playerMoveLeft = false; 
-			break;
-		case KeyEvent.VK_RIGHT:
-			playerMoveRight = false; 
-			break;
 		case KeyEvent.VK_UP:
 			playerMoveUp = false; 
-			break;
 		case KeyEvent.VK_DOWN:
-			playerMoveDown = false; 
-			break;
+			player.setMovingDistance(0);
 		}
 	}
 
@@ -303,6 +300,19 @@ public class Spielfeld extends JPanel implements MouseListener, KeyListener { //
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		mouseX = e.getX();
+		mouseY = e.getY();
 	}
 
 }
